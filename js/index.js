@@ -1,10 +1,10 @@
-const numberButtons = document.querySelectorAll(".number");
-const operatorButtons = document.querySelectorAll(".operator");
-const clear = document.querySelector(".clear");
-const deleteOption = document.querySelector(".delete");
 const previousOperand = document.querySelector(".previous-operand");
 const currentOperand = document.querySelector(".current-operand");
-const equal = document.querySelector(".equal")
+const clear = document.querySelector(".clear");
+const deleteButton = document.querySelector(".delete");
+const operatorButtons = document.querySelectorAll(".operator");
+const numberButtons = document.querySelectorAll(".number");
+const equalKey = document.querySelector(".equal");
 
 function add(a, b) {
     return a + b;
@@ -19,54 +19,62 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    return a/b
+    return a/b;
 }
 
-function operate(num1, num2, operator) {
-    num1 = Number(num1);
-    num2 = Number(num2)
+function operate(a, b, operator) {
+    // num1 = num1;
+    // num2 = num2;
     if(operator === "+") {
-        return add(num1, num2)
+        return add(a, b)
     } else if(operator === "-") {
-        return subtract(num1, num2)
+        return subtract(a, b)
     } else if(operator === "*") {
-        return multiply(num1, num2)
+        return multiply(a, b)
     } else {
-        return divide(num1, num2)
+        return divide(a, b)
     }
 }
 
-let storeNumber = "";
-let operatorClicked = "";
+let numberStored = " ";
 let firstNumber = "";
+let pressedOperator = "";
 let result = "";
+previousOperand.textContent = "";
 currentOperand.textContent = 0;
 
-numberButtons.forEach(number => {
-    number.addEventListener("click", function() {
-        storeNumber += number.value 
-        previousOperand.textContent += storeNumber;
+numberButtons.forEach(numbers => {
+    numbers.addEventListener("click", function() {
+        numberStored += numbers.value
+        previousOperand.textContent = numberStored;
+        calculate()
     })
 })
 
-operatorButtons.forEach(operator => {
-    operator.addEventListener("click", function() {
-        firstNumber = storeNumber
-        // Get the opertator that is clicked
-        operatorClicked= operator.textContent;
-        previousOperand.textContent = operator + storeNumber;
-        storeNumber = "";
-        console.log(firstNumber + storeNumber);
-        console.log(operatorClicked)
+operatorButtons.forEach(operating => {
+    operating.addEventListener("click", function() {
+        // Storing the first number when user pressed operator
+        firstNumber += numberStored
+        // Operator clicked
+        pressedOperator = operating.textContent
+        // add the previous operand of the operator plus the number stored
+        previousOperand.textContent = numberStored + pressedOperator
+        numberStored = "";
+        console.log(firstNumber + numberStored);
+        console.log(pressedOperator);
     })
 })
 
-function calculator() {
-    const result = operate(Number(firstNumber), Number(storeNumber), operatorClicked);
-   currentOperand.textContent = result;
+function calculate() {
+    result = operate(Number(firstNumber), Number(numberStored), pressedOperator);
+    if(pressedOperator === "+") return Number(firstNumber) + Number(numberStored);
+    if(pressedOperator === "-") return Number(firstNumber) - Number(numberStored);
+    if(pressedOperator === "*") return Number(firstNumber) * Number(numberStored);
+    if(pressedOperator === "/") return Number(firstNumber) / Number(numberStored)
+    currentOperand.textContent = result;
 }
+ equalKey.addEventListener("click", calculate)
 
-equal.addEventListener("click", calculator);
 
 
 
