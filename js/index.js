@@ -1,4 +1,5 @@
-const display = document.querySelector(".display")
+const display = document.querySelector(".display");
+const previousOperand = document.querySelector(".previous-operand");
 const clear = document.querySelector(".clear");
 const deleteButton = document.querySelector(".delete");
 const operatorButtons = document.querySelectorAll(".operator");
@@ -27,16 +28,25 @@ function divide(a, b) {
 }
 
 function operate(a, b, operator) {
-    switch (operator) {
-        case "+":
-          return add(a, b);
-        case "-":
-          return subtract(a, b);
-        case "*":
-          return multiply(a, b);
-        case "/":
-          return divide(a, b);
-      }
+    if(operator === "+") {
+        return add(a, b);
+    } else if(operator === "-") {
+        return subtract(a, b);
+    } else if(operator === "*") {
+        return multiply(a, b);
+    } else {
+        return divide(a, b)
+    }
+    // switch (operator) {
+    //     case "+":
+    //       return add(a, b);
+    //     case "-":
+    //       return subtract(a, b);
+    //     case "*":
+    //       return multiply(a, b);
+    //     case "/":
+    //       return divide(a, b);
+    //   }
 }
 
 numberButtons.forEach(numberButton => {
@@ -48,10 +58,11 @@ numberButtons.forEach(numberButton => {
 
 operatorButtons.forEach(opt => {
     opt.addEventListener("click", function() {
-        firstNumber += secondNumber;
+        firstNumber = secondNumber;
         clickedOperator = opt.textContent;
         display.textContent = secondNumber + clickedOperator;
         secondNumber = "";
+        // firstNumber + secondNumber;
 
     })
 });
@@ -59,7 +70,9 @@ operatorButtons.forEach(opt => {
 equalKey.addEventListener("click", function() {
     result = operate(Number(firstNumber), Number(secondNumber), clickedOperator);
     display.textContent = result;
-})
+    previousOperand.textContent = firstNumber + ' ' + clickedOperator + ' ' + secondNumber;
+    secondNumber = result;
+});
 
 
 
