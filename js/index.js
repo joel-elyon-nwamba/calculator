@@ -1,17 +1,12 @@
-const display = document.querySelector(".display");
 const previousOperand = document.querySelector(".previous-operand");
-const clear = document.querySelector(".clear");
+const currentOperand = document.querySelector(".current-operand");
+const numbers = document.querySelectorAll(".number");
+const operatorButton = document.querySelectorAll(".operator");
+const equalButton = document.querySelector(".equal");
+const clearButton = document.querySelector(".clear");
 const deleteButton = document.querySelector(".delete");
-const operatorButtons = document.querySelectorAll(".operator");
-const numberButtons = document.querySelectorAll(".number");
-const equalKey = document.querySelector(".equal");
 
-let firstNumber = ""
-let secondNumber = "";
-let clickedOperator = "";
-let result = "";
-
-function add(a, b) {
+function addition(a, b) {
     return a + b;
 }
 
@@ -24,55 +19,154 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    return a / b;
+    return a/b;
 }
 
-function operate(a, b, operator) {
-    if(operator === "+") {
-        return add(a, b);
-    } else if(operator === "-") {
-        return subtract(a, b);
-    } else if(operator === "*") {
-        return multiply(a, b);
-    } else {
+function operate(a, b, operating) {
+    if(operating === "+") {
+        return addition(a, b)
+    } else if(operating === "-") {
+        return subtraction(a, b)
+    } else if(operating === "*" ) {
+        return multiply(a, b)
+    } else{
         return divide(a, b)
-    }
-    // switch (operator) {
-    //     case "+":
-    //       return add(a, b);
-    //     case "-":
-    //       return subtract(a, b);
-    //     case "*":
-    //       return multiply(a, b);
-    //     case "/":
-    //       return divide(a, b);
-    //   }
+    } 
 }
 
-numberButtons.forEach(numberButton => {
-    numberButton.addEventListener("click", function(event) {
-        secondNumber += event.target.value;
-        display.textContent = secondNumber;
+let number1 = "";
+let number2 = "";
+let operation = "";
+let result = "";
+
+numbers.forEach(number => {
+    number.addEventListener("click", function(event) {
+        number1 += event.target.textContent;
+        previousOperand.textContent = number1;
     })
 });
 
-operatorButtons.forEach(opt => {
-    opt.addEventListener("click", function() {
-        firstNumber = secondNumber;
-        clickedOperator = opt.textContent;
-        display.textContent = secondNumber + clickedOperator;
-        secondNumber = "";
-        // firstNumber + secondNumber;
-
+// Make the calculator work! You’ll need to store the first number that is input into the calculator when a user presses an operator, and also save which operation has been chosen and then operate() on them when the user presses the “=” key.
+operatorButton.forEach(operator => {
+    operator.addEventListener("click", function(event) {
+        if(event.target.textContent !== "=") {
+            operation = event.target.textContent;
+            previousOperand.textContent = number1 + operation
+            number1 = ""
+        } else {
+            if(operation === "+") {
+                return number1 + number2
+            } else if(operation ===  "-") {
+                return number1 - number2
+            } else if(operation === "*") {
+               return number1 * number2
+            } else if(operation === "/") {
+                return number1 / number2;
+            }
+        }
     })
 });
 
-equalKey.addEventListener("click", function() {
-    result = operate(Number(firstNumber), Number(secondNumber), clickedOperator);
-    display.textContent = result;
-    previousOperand.textContent = firstNumber + ' ' + clickedOperator + ' ' + secondNumber;
-    secondNumber = result;
-});
+equalButton.addEventListener("click", function() {
+    result = operate(parseInt(number1), parseInt(number2), operation)
+    console.log(result)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// equalKey.addEventListener("click", function() {
+//     result = operate(Number(firstNumber), Number(secondNumber), clickedOperator);
+//     display.textContent = result;
+//     previousOperand.textContent = firstNumber + ' ' + clickedOperator + ' ' + secondNumber;
+//     secondNumber = result;
+// });
 
 
 
