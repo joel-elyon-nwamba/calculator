@@ -1,7 +1,7 @@
 const previousOperand = document.querySelector(".previous-operand");
 const currentOperand = document.querySelector(".current-operand");
-const numbers = document.querySelectorAll(".number");
-const operatorButton = document.querySelectorAll(".operator");
+const numberButtons = document.querySelectorAll(".number");
+const operatorButtons = document.querySelectorAll(".operator");
 const equalButton = document.querySelector(".equal");
 const clearButton = document.querySelector(".clear");
 const deleteButton = document.querySelector(".delete");
@@ -22,154 +22,74 @@ function divide(a, b) {
     return a/b;
 }
 
-function operate(a, b, operating) {
-    if(operating === "+") {
+function operate(a, toOperate, b) {
+    if(toOperate === "+") {
         return addition(a, b)
-    } else if(operating === "-") {
-        return subtraction(a, b)
-    } else if(operating === "*" ) {
+    } else if(toOperate === "-") {
+        return subtract(a, b)
+    } else if(toOperate === "*") {
         return multiply(a, b)
-    } else{
+    } else {
         return divide(a, b)
-    } 
+    }
 }
 
-let number1 = "";
-let number2 = "";
+
+let currentNumber = ""
+let firstNumber = "0";
+let secondNumber = "";
 let operation = "";
 let result = "";
 
-numbers.forEach(number => {
-    number.addEventListener("click", function(event) {
-        number1 += event.target.textContent;
-        previousOperand.textContent = number1;
-    })
-});
+function updateCurrentNumber() {
+    previousOperand.textContent = firstNumber + operation + secondNumber;
+}
 
-// Make the calculator work! You’ll need to store the first number that is input into the calculator when a user presses an operator, and also save which operation has been chosen and then operate() on them when the user presses the “=” key.
-operatorButton.forEach(operator => {
-    operator.addEventListener("click", function(event) {
-        if(event.target.textContent !== "=") {
-            operation = event.target.textContent;
-            previousOperand.textContent = number1 + operation
-            number1 = ""
+updateCurrentNumber()
+
+numberButtons.forEach(number => {
+    number.addEventListener("click", function() {
+        currentNumber += number.value;
+        console.log(currentNumber);
+        if(!operation) {
+            firstNumber = currentNumber;
         } else {
-            if(operation === "+") {
-                return number1 + number2
-            } else if(operation ===  "-") {
-                return number1 - number2
-            } else if(operation === "*") {
-               return number1 * number2
-            } else if(operation === "/") {
-                return number1 / number2;
-            }
+            secondNumber = currentNumber;
         }
+        updateCurrentNumber()
     })
+})
+
+function resultOfCalculation() {
+    currentOperand.textContent = result;
+}
+// Make the calculator work! You’ll need to store the first number that is input into the calculator when a user presses an operator, and also save which operation has been chosen and then operate() on them when the user presses the “=” key.
+operatorButtons.forEach(operating => {
+    operating.addEventListener("click", function(event) {
+        operation = operating.textContent;
+        if(secondNumber) {
+            // Do an operation here
+             result = operate(Number(firstNumber), operation , Number(secondNumber))
+            console.log(result);
+            resultOfCalculation();
+
+            firstNumber = result;
+            secondNumber = "";
+            currentNumber = ""
+        } else {
+            currentNumber = ""
+        }
+        updateCurrentNumber()
+    });
 });
 
 equalButton.addEventListener("click", function() {
-    result = operate(parseInt(number1), parseInt(number2), operation)
-    console.log(result)
+    
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// equalKey.addEventListener("click", function() {
-//     result = operate(Number(firstNumber), Number(secondNumber), clickedOperator);
-//     display.textContent = result;
-//     previousOperand.textContent = firstNumber + ' ' + clickedOperator + ' ' + secondNumber;
-//     secondNumber = result;
-// });
-
-
-
-
-
-
+clearButton.addEventListener("click", function() {
+    previousOperand.textContent = "";
+    currentOperand.textContent = "";
+    result= 0
+})
